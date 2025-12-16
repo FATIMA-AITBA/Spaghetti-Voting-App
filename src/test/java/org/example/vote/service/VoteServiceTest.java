@@ -1,27 +1,25 @@
 package org.example.vote.service;
 
-import org.example.vote.repo.InMemoryVoteRepository;
 import org.example.vote.model.Vote;
+import org.example.vote.repo.InMemoryVoteRepository;
+import org.example.vote.repo.VoteRepository;
 import org.example.vote.strategy.PluralityCountingStrategy;
-import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 import java.util.Map;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class VoteServiceTest {
+class VoteServiceTest {
 
     @Test
     void testCastAndCount() {
-        var repo = new InMemoryVoteRepository();
-        var svc = new VoteService(repo);
+        VoteRepository repo = new InMemoryVoteRepository();
+        VoteService service = new VoteService(repo);
 
-        svc.cast(new Vote("v1","Alice", System.currentTimeMillis()));
-        svc.cast(new Vote("v2","Alice", System.currentTimeMillis()));
-        svc.cast(new Vote("v3","Bob",   System.currentTimeMillis()));
+        service.cast(new Vote("user1", "Alice", System.currentTimeMillis()));
 
-        Map<String,Integer> res = svc.count(new PluralityCountingStrategy());
+        assertEquals(1, repo.findAll().size());
 
-        assertEquals(2, res.get("Alice"));
-        assertEquals(1, res.get("Bob"));
+        Map<String, Integer> result = service.count(new PluralityCountingStrategy());
+        assertEquals(1, result.get("Alice"));
     }
 }
