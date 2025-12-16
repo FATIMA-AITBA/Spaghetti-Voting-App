@@ -42,7 +42,7 @@ pipeline {
                 script {
                     echo 'Waiting for Quality Gate verdict from SonarQube...'
                     // Attend le résultat de SonarQube (max 5 minutes). Nécessite le plugin SonarQube Scanner.
-                    timeout(time: 5, unit: 'MINUTES') { 
+                    timeout(time: 15, unit: 'MINUTES') { 
                         // Si le Quality Gate échoue, le pipeline s'arrête immédiatement
                         waitForQualityGate abortPipeline: true
                     }
